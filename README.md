@@ -141,3 +141,7 @@ http://localhost:3000
 ADMIN_EMAIL = admin@sms.com
 ADMIN_PASSWORD = Admin@123
 ```
+
+![Screenshot of my project](https://github.com/siddharth6164/student-management-system/blob/master/frontend/public/SMS1.png)
+![Screenshot of my project](https://github.com/siddharth6164/student-management-system/blob/master/frontend/public/SMS2.png)
+![Screenshot of my project](https://github.com/siddharth6164/student-management-system/blob/master/frontend/public/SMS3.png)
