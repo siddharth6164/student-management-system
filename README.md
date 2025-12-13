@@ -136,3 +136,8 @@ Frontend will run on:
 ```
 http://localhost:3000
 ```
+## Email and Password
+```
+ADMIN_EMAIL = admin@sms.com
+ADMIN_PASSWORD = Admin@123
+```
