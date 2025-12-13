@@ -18,11 +18,11 @@ router.post(
             let user = await User.findOne({ email });
             if (user) {
                 const match = await user.comparePassword(password);
-                if (!match) return res.status(401).json({ message: 'Invalid credentials' });
+                if (!match) return res.status(401).json({ message: 'Invalid credentials..' });
             } else {
                 // fallback: allow admin via env credentials (convenience)
                 if (email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD) {
-                    return res.status(401).json({ message: 'Invalid credentials' });
+                    return res.status(401).json({ message: 'Invalid credentials...' });
                 }
                 // create or find admin user
                 user = await User.findOneAndUpdate(
