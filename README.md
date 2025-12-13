@@ -25,19 +25,33 @@ The application supports **JWT-based authentication**, **student CRUD operations
 ## 📁 Project Structure
 
 student-management-system/
+
 ├── frontend/
+
 │ ├── src/
+
 │ ├── public/
+
 │ └── package.json
+
 │
+
 ├── backend/
+
 │ ├── models/
+
 │ ├── routes/
+
 │ ├── middleware/
+
 │ ├── controllers/
+
 │ ├── server.js
+
 │ └── package.json
+
 │
+
 └── README.md
 
 
