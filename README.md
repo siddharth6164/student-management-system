@@ -143,7 +143,7 @@ ADMIN_PASSWORD = Admin@123
 ```
 
 ![Screenshot of my project1](https://github.com/siddharth6164/student-management-system/blob/master/frontend/public/SMS1.png)
-
-![Screenshot of my project2](https://github.com/siddharth6164/student-management-system/blob/master/frontend/public/SMS2.png)
-
-![Screenshot of my project3](https://github.com/siddharth6164/student-management-system/blob/master/frontend/public/SMS3.png)
+``` ```
+![Screenshot of my project2](https://github.com/siddharth6164/student-management-system/blob/master/frontend/public/SMS2.jpng)
+``` ```
+![Screenshot of my project3](https://github.com/siddharth6164/student-management-system/blob/master/frontend/public/SMS3.jpeg)
