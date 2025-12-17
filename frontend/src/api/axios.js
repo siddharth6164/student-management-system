@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://student-management-system-tau-nine.vercel.app/api",
+  baseURL: "https://student-management-system-pearl-six.vercel.app/" || "https://vercel.com/siddharth-singhs-projects-d45728b0/student-management-system/HaZpT9y4huhKYG26nvfbDA2hb35Y",
 });
 
 api.interceptors.request.use((config) => {
