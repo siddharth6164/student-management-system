@@ -8,29 +8,25 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Manual CORS headers - most permissive approach
-app.use((req, res, next) => {
-    // Set CORS headers for all requests
+// Ultra-permissive CORS - handle all requests
+app.use('*', (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+    res.header('Access-Control-Allow-Methods', '*');
     res.header('Access-Control-Allow-Headers', '*');
     res.header('Access-Control-Max-Age', '86400');
 
-    // Handle preflight requests immediately
     if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    } else {
-        next();
+        return res.status(200).json({ message: 'CORS preflight OK' });
     }
+    next();
 });
 
-// Backup CORS middleware
+// Standard CORS middleware as backup
 app.use(cors({
-    origin: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
-    credentials: false,
-    optionsSuccessStatus: 200
+    origin: '*',
+    methods: '*',
+    allowedHeaders: '*',
+    credentials: false
 }));
 
 app.use(express.json());
@@ -53,7 +49,23 @@ connectDB(process.env.MONGO_URI || 'mongodb://localhost:27017/sms');
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 
-app.get('/', (req, res) => res.json({ message: 'SMS API running', ok: true }));
+// Root health check
+app.get('/', (req, res) => {
+    res.json({
+        message: 'SMS API running',
+        ok: true,
+        timestamp: new Date().toISOString(),
+        env: process.env.NODE_ENV || 'development'
+    });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString()
+    });
+});
 
 // Test endpoint to verify CORS
 app.get('/test', (req, res) => {
