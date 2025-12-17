@@ -8,13 +8,28 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// CORS configuration - allow all origins and headers
+// Manual CORS headers - more explicit approach
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+});
+
+// Also use cors middleware as backup
 app.use(cors({
-    origin: '*', // Allow all origins
-    methods: '*', // Allow all methods
-    allowedHeaders: '*', // Allow all headers
-    credentials: false // Set to false when using wildcard origin
+    origin: '*',
+    methods: '*',
+    allowedHeaders: '*',
+    credentials: false
 }));
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
@@ -26,6 +41,23 @@ app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 
 app.get('/', (req, res) => res.json({ message: 'SMS API running', ok: true }));
+
+// Test endpoint to verify CORS
+app.get('/test', (req, res) => {
+    res.json({
+        message: 'CORS test endpoint',
+        timestamp: new Date().toISOString(),
+        headers: req.headers
+    });
+});
+
+// Test API endpoint
+app.get('/api/test', (req, res) => {
+    res.json({
+        message: 'API test endpoint working',
+        timestamp: new Date().toISOString()
+    });
+});
 
 // Error handler must be last
 app.use(errorHandler);
