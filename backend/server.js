@@ -39,8 +39,12 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB
-connectDB(process.env.MONGO_URI || 'mongodb://localhost:27017/sms');
+// Connect to MongoDB (with error handling for Vercel)
+try {
+    connectDB(process.env.MONGO_URI || 'mongodb://localhost:27017/sms');
+} catch (error) {
+    console.error('MongoDB connection failed:', error);
+}
 
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
@@ -66,11 +70,13 @@ app.get('/', (req, res) => {
 // Error handler must be last
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`✓ Server running on http://localhost:${PORT}`);
-    console.log(`✓ API available at http://localhost:${PORT}/api`);
-});
+// Only start server in development (not on Vercel)
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`✓ Server running on http://localhost:${PORT}`);
+        console.log(`✓ API available at http://localhost:${PORT}/api`);
+    });
+}
 
 // Export for Vercel
 module.exports = app;
