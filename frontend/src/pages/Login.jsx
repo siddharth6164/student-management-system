@@ -6,6 +6,7 @@ import useAuth from "../hooks/useAuth";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { toast } from "../utils/toast";
+import getErrorMessage from "../utils/apiError";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ export default function Login() {
       toast.success("Logged in");
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Login failed");
+      toast.error(getErrorMessage(err, "Login failed"));
     } finally {
       setLoading(false);
     }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../api/axios";
 import Button from "../components/Button";
 import { toast } from "../utils/toast";
+import getErrorMessage from "../utils/apiError";
 
 export default function Dashboard() {
   const [total, setTotal] = useState(null);
@@ -14,7 +15,7 @@ export default function Dashboard() {
       const res = await api.get("/students?page=1&limit=1");
       setTotal(res.data.total ?? 0);
     } catch (err) {
-      toast.error("Failed to load dashboard");
+      toast.error(getErrorMessage(err, "Failed to load dashboard"));
     } finally {
       setLoading(false);
     }

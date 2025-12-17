@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://student-management-system-a424ohv54.vercel.app/",
 });
 
 api.interceptors.request.use((config) => {

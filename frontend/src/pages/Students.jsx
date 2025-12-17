@@ -5,6 +5,7 @@ import api from "../api/axios";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { toast } from "../utils/toast";
+import getErrorMessage from "../utils/apiError";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
 export default function Students() {
@@ -36,7 +37,7 @@ export default function Students() {
       );
       setStudents(res.data.data || []);
     } catch (err) {
-      toast.error("Failed to load students");
+      toast.error(getErrorMessage(err, "Failed to load students"));
     } finally {
       setLoading(false);
     }
@@ -57,7 +58,7 @@ export default function Students() {
       setStudents((prev) => prev.filter((s) => s._id !== id));
       toast.success("Student deleted");
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Delete failed");
+      toast.error(getErrorMessage(err, "Delete failed"));
     } finally {
       setDeleting(null);
     }
