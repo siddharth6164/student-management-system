@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://student-management-system-rose-one.vercel.app/',
+  baseURL: 'https://student-management-system-rose-one.vercel.app',
 });
 
 api.interceptors.request.use((config) => {
