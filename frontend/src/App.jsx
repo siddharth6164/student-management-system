@@ -87,7 +87,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/" element={<Navigate to="/" />} />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
