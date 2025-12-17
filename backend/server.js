@@ -91,8 +91,23 @@ app.get('/debug/env', (req, res) => {
         hasJwtSecret: !!process.env.JWT_SECRET,
         hasAdminEmail: !!process.env.ADMIN_EMAIL,
         hasAdminPassword: !!process.env.ADMIN_PASSWORD,
+        adminEmail: process.env.ADMIN_EMAIL, // Show actual value for debugging
         nodeEnv: process.env.NODE_ENV,
         port: process.env.PORT
+    });
+});
+
+// Simple login test endpoint
+app.post('/debug/login-test', (req, res) => {
+    const { email, password } = req.body;
+    res.json({
+        receivedEmail: email,
+        receivedPassword: password,
+        expectedEmail: process.env.ADMIN_EMAIL,
+        expectedPassword: process.env.ADMIN_PASSWORD,
+        emailMatch: email === process.env.ADMIN_EMAIL,
+        passwordMatch: password === process.env.ADMIN_PASSWORD,
+        hasAllEnvVars: !!(process.env.MONGO_URI && process.env.JWT_SECRET && process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD)
     });
 });
 
