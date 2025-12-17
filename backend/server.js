@@ -8,38 +8,27 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Ultra-permissive CORS - handle all requests
-app.use('*', (req, res, next) => {
+// CORS Configuration - Allow all origins
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
+    credentials: false
+}));
+
+// Additional CORS headers for maximum compatibility
+app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', '*');
-    res.header('Access-Control-Allow-Headers', '*');
-    res.header('Access-Control-Max-Age', '86400');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With, Accept');
 
     if (req.method === 'OPTIONS') {
-        return res.status(200).json({ message: 'CORS preflight OK' });
+        return res.status(200).end();
     }
     next();
 });
 
-// Standard CORS middleware as backup
-app.use(cors({
-    origin: '*',
-    methods: '*',
-    allowedHeaders: '*',
-    credentials: false
-}));
-
 app.use(express.json());
-
-// Simple CORS test endpoint - should work immediately
-app.all('/cors-test', (req, res) => {
-    res.json({
-        message: 'CORS is working!',
-        method: req.method,
-        origin: req.headers.origin,
-        timestamp: new Date().toISOString()
-    });
-});
 
 const PORT = process.env.PORT || 5000;
 
@@ -49,65 +38,11 @@ connectDB(process.env.MONGO_URI || 'mongodb://localhost:27017/sms');
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 
-// Root health check
 app.get('/', (req, res) => {
     res.json({
         message: 'SMS API running',
         ok: true,
-        timestamp: new Date().toISOString(),
-        env: process.env.NODE_ENV || 'development'
-    });
-});
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.json({
-        status: 'healthy',
         timestamp: new Date().toISOString()
-    });
-});
-
-// Test endpoint to verify CORS
-app.get('/test', (req, res) => {
-    res.json({
-        message: 'CORS test endpoint',
-        timestamp: new Date().toISOString(),
-        headers: req.headers
-    });
-});
-
-// Test API endpoint
-app.get('/api/test', (req, res) => {
-    res.json({
-        message: 'API test endpoint working',
-        timestamp: new Date().toISOString()
-    });
-});
-
-// Debug endpoint to check environment variables
-app.get('/debug/env', (req, res) => {
-    res.json({
-        hasMongoUri: !!process.env.MONGO_URI,
-        hasJwtSecret: !!process.env.JWT_SECRET,
-        hasAdminEmail: !!process.env.ADMIN_EMAIL,
-        hasAdminPassword: !!process.env.ADMIN_PASSWORD,
-        adminEmail: process.env.ADMIN_EMAIL, // Show actual value for debugging
-        nodeEnv: process.env.NODE_ENV,
-        port: process.env.PORT
-    });
-});
-
-// Simple login test endpoint
-app.post('/debug/login-test', (req, res) => {
-    const { email, password } = req.body;
-    res.json({
-        receivedEmail: email,
-        receivedPassword: password,
-        expectedEmail: process.env.ADMIN_EMAIL,
-        expectedPassword: process.env.ADMIN_PASSWORD,
-        emailMatch: email === process.env.ADMIN_EMAIL,
-        passwordMatch: password === process.env.ADMIN_PASSWORD,
-        hasAllEnvVars: !!(process.env.MONGO_URI && process.env.JWT_SECRET && process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD)
     });
 });
 
