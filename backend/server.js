@@ -8,29 +8,42 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Manual CORS headers - more explicit approach
+// Manual CORS headers - most permissive approach
 app.use((req, res, next) => {
+    // Set CORS headers for all requests
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+    res.header('Access-Control-Allow-Headers', '*');
+    res.header('Access-Control-Max-Age', '86400');
 
-    // Handle preflight requests
+    // Handle preflight requests immediately
     if (req.method === 'OPTIONS') {
-        res.sendStatus(200);
+        return res.status(200).end();
     } else {
         next();
     }
 });
 
-// Also use cors middleware as backup
+// Backup CORS middleware
 app.use(cors({
-    origin: '*',
-    methods: '*',
-    allowedHeaders: '*',
-    credentials: false
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+    credentials: false,
+    optionsSuccessStatus: 200
 }));
 
 app.use(express.json());
+
+// Simple CORS test endpoint - should work immediately
+app.all('/cors-test', (req, res) => {
+    res.json({
+        message: 'CORS is working!',
+        method: req.method,
+        origin: req.headers.origin,
+        timestamp: new Date().toISOString()
+    });
+});
 
 const PORT = process.env.PORT || 5000;
 
