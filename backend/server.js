@@ -8,21 +8,13 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:3000',
-        'http://127.0.0.1:5173',
-        'https://student-management-system-bzxb.vercel.app',
-        'https://student-management-system-tau-nine.vercel.app'
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions));
+// CORS configuration - allow all origins and headers
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: '*', // Allow all methods
+    allowedHeaders: '*', // Allow all headers
+    credentials: false // Set to false when using wildcard origin
+}));
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
