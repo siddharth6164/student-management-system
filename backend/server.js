@@ -66,7 +66,11 @@ app.get('/', (req, res) => {
 // Error handler must be last
 app.use(errorHandler);
 
+// Start server
 app.listen(PORT, () => {
     console.log(`✓ Server running on http://localhost:${PORT}`);
     console.log(`✓ API available at http://localhost:${PORT}/api`);
 });
+
+// Export for Vercel
+module.exports = app;
