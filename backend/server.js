@@ -72,6 +72,18 @@ app.get('/api/test', (req, res) => {
     });
 });
 
+// Debug endpoint to check environment variables
+app.get('/debug/env', (req, res) => {
+    res.json({
+        hasMongoUri: !!process.env.MONGO_URI,
+        hasJwtSecret: !!process.env.JWT_SECRET,
+        hasAdminEmail: !!process.env.ADMIN_EMAIL,
+        hasAdminPassword: !!process.env.ADMIN_PASSWORD,
+        nodeEnv: process.env.NODE_ENV,
+        port: process.env.PORT
+    });
+});
+
 // Error handler must be last
 app.use(errorHandler);
 
